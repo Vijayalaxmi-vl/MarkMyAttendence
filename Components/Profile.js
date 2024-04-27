@@ -2,7 +2,12 @@ import React from 'react';
 import { View, SafeAreaView, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import Entypo from "react-native-vector-icons/Entypo";
+
+
 const Profile = () => {   //UI of Profile page
+
+const Details='Details';
+
 
 
   return (
@@ -20,7 +25,7 @@ const Profile = () => {   //UI of Profile page
           <View style={styles.imgfoot}>
             <Text style={{fontSize: 18,
     color: 'black',
-    fontWeight: '500',}} >Name Kumar</Text>
+    fontWeight: '500',}} >{Details}</Text>
             <Text style={{
               fontSize: 14,
               color: 'black',

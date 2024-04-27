@@ -37,32 +37,7 @@ const Login = ({ navigation }) => {                   //Login Page UI
     }, 2000);
   };
 
-  const Login_api = async () => {
-    console.warn(userId);
-    const data = {userId:parseInt(userId), password:password};
-    const headers = {
-      "Content-Type":"application/json",
-    }
-    const url = "https://api.markmyattendance.in/student/v1/login";
-    const response = await axios.post(url,data, headers);
-    const token = response.data.token;
-    console.log(response.data);
-
-    await Get_Data_By_Token(token);
-  };
-  const Get_Data_By_Token = async (token) => {
-    console.warn(password);
-    const data = {userId:parseInt(userId)};
-    const headers ={
-      "Content-Type":"application/json",
-      Authorization:token,
-    };
-    const url = "https://api.markmyattendance.in/student/v1/details";
-    const details = await axios.post(url,data,{headers});
-    console.log(details.data);
-  };
-
-
+  
   return (
     <SafeAreaView    >
       <ScrollView>
@@ -72,7 +47,7 @@ const Login = ({ navigation }) => {                   //Login Page UI
 
           <View style={styles.logo}>
             <Text><Entypo name="thumbs-up" color={'#7a38b0'} size={34} />
-              <Text style={styles.logotext}>  Mark Attendence</Text>
+              <Text style={styles.logotext}>  Mark My Attendance</Text>
             </Text>
           </View>
 
@@ -105,9 +80,8 @@ const Login = ({ navigation }) => {                   //Login Page UI
             <TouchableOpacity
               style={styles.btn}
               onPress={() => {
-                Login_api();
                 RegisterUser({ navigation, username, userId, password });   // saving user login data in database
-                clearFields();
+               // clearFields();
               }}>
               <Text style={{ fontSize: 25, color: '#f2f1f0', textAlign: 'center', padding: 5, fontWeight: '500' }}>Sign in</Text>
             </TouchableOpacity>

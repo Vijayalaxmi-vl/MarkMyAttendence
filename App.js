@@ -37,7 +37,7 @@ const App = () => {
           component={LoadingIndicator}
           options={{
           headerLeft: () => (<View style={{marginLeft:20,marginTop:10,}}><Ento name="thumbs-up" color={'#7a38b0'} size={25} /></View>), 
-          title:'Mark My Attendence',
+          title:'Mark My Attendance',
           headerTitleStyle: {
             color:'#7a38b0',
             fontSize:21,
@@ -49,7 +49,7 @@ const App = () => {
         />
         
         <Stack.Screen                        // Home page
-          name="Mark My Attendence"
+          name="Mark My Attendance"
           component={Parent}
           options={{
             headerLeft: () => (<View style={{marginLeft:20,marginTop:10,}}><Ento name="thumbs-up" color={'#7a38b0'} size={25} /></View>), 

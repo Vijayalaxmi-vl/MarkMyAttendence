@@ -17,15 +17,16 @@ import Calendar_Picker from './calendarPicker';
 import lastMonth, { lastWeek, dateRange, currentMonth } from './colorfulldays';
 import Colorinfo from './colorinfo';
 
+
 // // Home page of App.
 const Home = ({ navigation }) => {
-  const [Attendence_status, setAttendence_status] = useState('Absent');
+  const [Attendance_status, setAttendance_status] = useState('Absent');
   const [att__statuscolor, setAtt__statuscolor] = useState(
-    Attendence_status == 'Present' ? '#13541c' : '#85241d');
+    Attendance_status == 'Present' ? '#13541c' : '#85241d');
 
   const [input_start, setInput_Start] = useState('Start');
   const [input_end, setInput_End] = useState('End');
-  const [attendencePercentage, setattendencePercentage] = useState('');
+  const [attendancePercentage, setattendancePercentage] = useState('');
   const [showDateRange, setShowDateRange] = useState(false);               // set Visibility of DateRange starting and ending date
   const [selected_day, setSetected_day] = useState('');                  // seleted day on calendar from present days
   const [display_Time, setDisplay_Time] = useState(false);           // set Visibility  of selected day sign in and sign out time
@@ -41,18 +42,18 @@ const Home = ({ navigation }) => {
   let status_day = new Date();
   const Today_status = () => {
     if (status_day.getDay() === 0) {
-      setAttendence_status("Sunday");
+      setAttendance_status("Sunday");
     } else {
-      setAttendence_status("Absent");
+      setAttendance_status("Absent");
     }
   };
 
   const Yesterday_status = () => {
     
       if (status_day.getDay() === 0) {
-        setAttendence_status("Sunday");
+        setAttendance_status("Sunday");
       } else {
-        setAttendence_status("Absent");
+        setAttendance_status("Absent");
       }
     
   };
@@ -64,7 +65,7 @@ const Home = ({ navigation }) => {
   });
 
   const getdata = (date_Range_Object) => {            //set % attendence and colorfulldays for DateRange submition
-    setattendencePercentage(date_Range_Object.intPercentage);
+    setattendancePercentage(date_Range_Object.intPercentage);
     setcolorDate(date_Range_Object.objDate);
   };
   const closeModal = () => {   // Hide  DateRange starting and ending date
@@ -109,7 +110,7 @@ const Home = ({ navigation }) => {
               <Icons name='calendar' size={20} color="black" />
             </Pressable>
             <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'black', marginTop: 10, }}>
-              {attendencePercentage}%
+              {attendancePercentage}%
             </Text>
         </View>
 
@@ -127,7 +128,7 @@ const Home = ({ navigation }) => {
                   Yesterday status :
                   <Text style={{ fontSize: 20, color: att__statuscolor, fontWeight: 'normal' }}>
                     {' '}
-                    {Attendence_status}
+                    {Attendance_status}
                   </Text>{' '}
                 </Text>
               </View>
@@ -139,7 +140,7 @@ const Home = ({ navigation }) => {
                   Today status :
                   <Text style={{ fontSize: 20, color: att__statuscolor, fontWeight: 'normal' }}>
                     {' '}
-                    {Attendence_status}
+                    {Attendance_status}
                   </Text>{' '}
                 </Text>
               </View>
@@ -150,7 +151,7 @@ const Home = ({ navigation }) => {
 
         <View style={styles.calendar} >
           <Text style={{ fontSize: 15, fontWeight: "500", color: 'black', marginTop: 10,
-           textAlign: 'center', backgroundColor: 'white', paddingTop: 2, }} >Attendence Calendar</Text>
+           textAlign: 'center', backgroundColor: 'white', paddingTop: 2, }} >Attendance Calendar</Text>
           <Calendar
             style={{width: '100%',borderRadius: 5,}}
             theme={{

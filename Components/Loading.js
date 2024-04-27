@@ -16,7 +16,7 @@ const LoadingIndicator = () => {              //UI of loading indicating page
 
   useEffect(() => {                          //  After Displaying loading indicator for 3 seconds navigate to Home page
     if (isLoadingComplete) {
-      navigation.navigate('Mark My Attendence');
+      navigation.navigate('Mark My Attendance');
     }
   }, [isLoadingComplete, navigation]);
 
