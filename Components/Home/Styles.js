@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
       paddingHorizontal:15,
       borderBottomWidth:4,
      // borderBottomColor:'blue',
-      marginBottom:10
+      marginBottom:10,
 
     },
 
@@ -43,13 +43,13 @@ const styles = StyleSheet.create({
     },
     status: {
       height: 50,
-      width: '92%',
+      width: '94%',
       flexDirection:'row',
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 5,
-      elevation: 5,
-      shadowColor: 'black',
+      elevation: 1,
+    //  shadowColor: 'black',
       backgroundColor: '#e3e2e1',
     },
     statusbtn:{
@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
    
   
     calendar: {
-      width: '92%',
+      width: '96%',
       borderRadius: 5,
-      marginHorizontal:"4%",
+      marginHorizontal:"2%",
       elevation: 3,
       shadowColor: 'black',
       backgroundColor: 'white',

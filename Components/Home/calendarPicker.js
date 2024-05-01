@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Modal, Pressable } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
-import Entypo from 'react-native-vector-icons/Entypo';
 import { startOfMonth, endOfMonth, format, startOfDay, addDays, isSunday, addMonths } from 'date-fns';
 import dateRange from './colorfulldays';
 import styles from './Styles';
 
 
 const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Start, update_Input_End }) => {
-    const [start, setStart] = useState('DD-MM-YYYY');    //Starting date of dateRange Function for % attendence
-    const [end, setEnd] = useState('DD-MM-YYYY');
+    const [start, setStart] = useState();    //Starting date of dateRange Function for % attendence
+    const [end, setEnd] = useState();
     const [buttonColor1, setButtonColor1] = useState(['#7a38b0', 'white']);                 //Color of button which calculate % attendence
     const [buttonColor2, setButtonColor2] = useState(['white', 'black']);
     const [buttonColor3, setButtonColor3] = useState(['white', 'black']);
@@ -19,23 +18,23 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
 
 
     useEffect(() => {           // set colorfulldays of calendar on opening app  
-        getdata(currentMonth());
+        currentMonth().then(res => {
+            getdata(res).then(r => {
+                })
+                .catch(error => {
+                    console.error('error in getdata function 1', error);
+                })
+                .catch(error => {
+                    console.error('error while calling current month 0', error);
+                })
+        });
     }, []);
-
-    const onSubmit = () => {
-        if (start != 'DD-MM-YYYY' && end != 'DD-MM-YYYY') {
-            let date_Range_Object = dateRange(start, end);
-            getdata(date_Range_Object);
-        }
-        closeModal();
-    };
 
     const minDate = new Date(2023, 6, 3);
     const maxDate = new Date();
 
     const onDateChange = (date, type) => {
 
-        console.log(JSON.stringify(date));
         const newDate = JSON.stringify(date);
         const newDate1 = newDate.substring(1, newDate.length - 1);
         const dates = newDate1.split("T");
@@ -43,7 +42,6 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
         const day = date1[2];
         const month = date1[1];
         const year = date1[0];
-        console.log(day + "-" + month + "-" + year);
 
         if (type == 'END_DATE') {
             if (day == undefined) {
@@ -51,12 +49,23 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
             }
             else {
                 updateEnd(date);
-                onSubmit();
+                dateRange(start, date).then(res => {
+                    getdata(res).then(r => {
+                        closeModal();
+                    })
+                        .catch(error => {
+                            console.error('error in getdata function 2', error);
+                        })
+                        .catch(error => {
+                            console.error('error while calling daterange ', error);
+                        })
+                });
             }
         }
         else {
             updateStart(date);
             updateEnd('DD-MM-YYYY');
+
         }
 
         setButtonColor1(['white', 'black']);
@@ -93,57 +102,81 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
             update_Input_End(day + "-" + month + "-" + year);
     };
 
-    function from_30_Day_ago() {
-        const today = new Date();
-        const startDate = addDays(today, -30); // Subtracting a day to get the last day of the previous month
-        const endDate = today;
-        updateStart(startDate);
-        updateEnd(endDate);
-        return dateRange(startDate, endDate);
+    async function from_30_Day_ago() {
+        try {
+            const today = new Date();
+            const startDate = addDays(today, -30); // Subtracting a day to get the last day of the previous month
+            const endDate = today;
+            updateStart(startDate);
+            updateEnd(endDate);
+            return await dateRange(startDate, endDate);
+        } catch (error) {
+            console.error("Error in 30 days ago:", error);
+        }
     };
-    function last_6_Months() {
-        const today = new Date();
-        const startDate = addDays(addMonths(today, -6), 1); // Subtracting a day to get the last day of the previous month
-        const endDate = today;
-        updateStart(startDate);
-        updateEnd(endDate);
-        return dateRange(startDate, end);
+    async function last_6_Months() {
+        try {
+            const today = new Date();
+            const startDate = addDays(addMonths(today, -6), 1); // Subtracting a day to get the last day of the previous month
+            const endDate = today;
+            updateStart(startDate);
+            updateEnd(endDate);
+            return await dateRange(startDate, end);
+        } catch (error) {
+            console.error("Error in last six month:", error);
+        }
     };
-    function thisYear() {
-        const today = new Date();
-        const startDate = addDays(today, -365); // Subtracting a day to get the last day of the previous month
-        const endDate = today;
-        updateStart(startDate);
-        updateEnd(endDate);
-        return dateRange(startDate, endDate);
+    async function thisYear() {
+        try {
+            const today = new Date();
+            const startDate = addDays(today, -365); // Subtracting a day to get the last day of the previous month
+            const endDate = today;
+            updateStart(startDate);
+            updateEnd(endDate);
+            return await dateRange(startDate, endDate);
+        } catch (error) {
+            console.error("Error in thisYear:", error);
+        }
     };
-    function lastWeek() {
-        const today = new Date();
-        const endDate = today;
-        const startDate = addDays(today, -6);
-        updateStart(startDate);
-        updateEnd(endDate);
-        return dateRange(startDate, endDate);
-    }
-    function lastMonth() {
-        const today = new Date();
-        const startDate = startOfMonth(addMonths(today, -1)); // Subtracting a day to get the last day of the previous month
-        const endDate = endOfMonth(addMonths(today, -1));;
-        const start1 = addDays(startOfMonth(startDate), 1);
-        updateStart(start1);
-        updateEnd(endDate);
-        return dateRange(startDate, endDate);
-    }
+    async function lastWeek() {
+        try {
+            const today = new Date();
+            const endDate = today;
+            const startDate = addDays(today, -6);
+            updateStart(startDate);
+            updateEnd(endDate);
+            return await dateRange(startDate, endDate);
+        } catch (error) {
+            console.error("Error in lastweek:", error);
+        }
+    };
+    async function lastMonth() {
+        try {
+            const today = new Date();
+            const startDate = startOfMonth(addMonths(today, -1)); // Subtracting a day to get the last day of the previous month
+            const endDate = endOfMonth(addMonths(today, -1));;
+            const start1 = addDays(startOfMonth(startDate), 1);
+            updateStart(start1);
+            updateEnd(endDate);
+            return await dateRange(startDate, endDate);
+        } catch (error) {
+            console.error("Error in lastmonth:", error);
+        }
+    };
 
-    function currentMonth() {
-        const today = new Date();
-        const startDate = addDays(startOfMonth(today), 0);
-        const endDate = today;
-        const start1 = addDays(startOfMonth(startDate), 1);
-        updateStart(start1);
-        updateEnd(endDate);
-        return dateRange(startDate, endDate);
-    }
+    async function currentMonth() {
+        try {
+            const today = new Date();
+            const startDate = addDays(startOfMonth(today), 0);
+            const endDate = today;
+            const start1 = addDays(startOfMonth(startDate), 1);
+            updateStart(start1);
+            updateEnd(endDate);
+            return await dateRange(startDate, endDate);
+        } catch (error) {
+            console.error("Error in currentMonth:", error);
+        }
+    };
 
 
     return (
@@ -169,7 +202,17 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
                         <Pressable
                             style={[styles.btn, { backgroundColor: buttonColor1[0] }]}
                             onPress={() => {
-                                getdata(currentMonth());
+                                currentMonth().then(res => {
+                                    getdata(res).then(r => {
+
+                                    })
+                                        .catch(error => {
+                                            console.error('error in getdata function 3', error);
+                                        })
+                                        .catch(error => {
+                                            console.error('error while calling current month 1', error);
+                                        })
+                                });
                                 closeModal();
                                 setButtonColor1(['#7a38b0', 'white']);
                                 setButtonColor2(['white', 'black']);
@@ -183,7 +226,17 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
                         <Pressable
                             style={[styles.btn, { backgroundColor: buttonColor2[0], marginHorizontal: "3%", }]}
                             onPress={() => {
-                                getdata(lastMonth());
+                                lastMonth().then(res => {
+                                    getdata(res).then(r => {
+
+                                    })
+                                        .catch(error => {
+                                            console.error('error in getdata function 4', error);
+                                        })
+                                        .catch(error => {
+                                            console.error('error while calling last month', error);
+                                        })
+                                });
                                 closeModal();
                                 setButtonColor1(['white', 'black']);
                                 setButtonColor2(['#7a38b0', 'white']);
@@ -198,7 +251,17 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
                         <Pressable
                             style={[styles.btn, { backgroundColor: buttonColor3[0] }]}
                             onPress={() => {
-                                getdata(lastWeek());
+                                lastWeek().then(res => {
+                                    getdata(res).then(r => {
+
+                                    })
+                                        .catch(error => {
+                                            console.error('error in getdata function 5', error);
+                                        })
+                                        .catch(error => {
+                                            console.error('error while calling lastweek', error);
+                                        })
+                                });
                                 closeModal();
                                 setButtonColor1(['white', 'black']);
                                 setButtonColor2(['white', 'black']);
@@ -214,7 +277,17 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
                         <Pressable
                             style={[styles.btn, { backgroundColor: buttonColor4[0] }]}
                             onPress={() => {
-                                getdata(from_30_Day_ago());
+                                from_30_Day_ago().then(res => {
+                                    getdata(res).then(r => {
+
+                                    })
+                                        .catch(error => {
+                                            console.error('error in getdata function 6', error);
+                                        })
+                                        .catch(error => {
+                                            console.error('error while calling 30 days ago', error);
+                                        })
+                                });
                                 closeModal();
                                 setButtonColor1(['white', 'black']);
                                 setButtonColor2(['white', 'black']);
@@ -228,7 +301,17 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
                         <Pressable
                             style={[styles.btn, { backgroundColor: buttonColor5[0], marginHorizontal: "3%", }]}
                             onPress={() => {
-                                getdata(thisYear());
+                                thisYear().then(res => {
+                                    getdata(res).then(r => {
+
+                                    })
+                                        .catch(error => {
+                                            console.error('error in getdata function 7', error);
+                                        })
+                                        .catch(error => {
+                                            console.error('error while calling thisYear', error);
+                                        })
+                                });
                                 closeModal();
                                 setButtonColor1(['white', 'black']);
                                 setButtonColor2(['white', 'black']);
@@ -243,7 +326,17 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
                         <Pressable
                             style={[styles.btn, { backgroundColor: buttonColor6[0] }]}
                             onPress={() => {
-                                getdata(last_6_Months());
+                                last_6_Months().then(res => {
+                                    getdata(res).then(rr => {
+
+                                    })
+                                        .catch(error => {
+                                            console.error('error in getdata function 8', error);
+                                        })
+                                        .catch(error => {
+                                            console.error('error while calling last six month', error);
+                                        })
+                                });
                                 closeModal();
                                 setButtonColor1(['white', 'black']);
                                 setButtonColor2(['white', 'black']);
@@ -278,7 +371,7 @@ const stylesthis = StyleSheet.create({
         marginTop: 280,
         marginHorizontal: "4%",
         borderRadius: 10,
-        elevation:3,
+        elevation: 3,
         shadowColor: 'blue',
     },
     cross: {

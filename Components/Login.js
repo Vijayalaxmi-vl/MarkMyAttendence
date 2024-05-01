@@ -46,7 +46,7 @@ const Login = ({ navigation }) => {                   //Login Page UI
         <View style={styles.container} >
 
           <View style={styles.logo}>
-            <Text><Entypo name="thumbs-up" color={'#7a38b0'} size={34} />
+            <Text style={styles.logotext} ><Entypo name="thumbs-up" color={'#7a38b0'} size={32} />
               <Text style={styles.logotext}>  Mark My Attendance</Text>
             </Text>
           </View>
@@ -114,12 +114,15 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
   },
   logo: {
-    marginTop: 80,
+   marginTop: 80,
   },
   logotext: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#7a38b0',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)', 
+    textShadowOffset: { width: 2, height: 2 }, 
+    textShadowRadius: 5, 
 
   },
   input: {

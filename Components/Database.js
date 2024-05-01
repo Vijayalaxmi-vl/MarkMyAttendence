@@ -5,27 +5,6 @@ import { Get_Data_By_Token, Login_api } from './api';
 var db = openDatabase({ name: 'UserDatabase.db' });
 
 
-const userData = {
-  "admissionType": "R",
-  "admissionYear": "2022",
-  "batch": "2022",
-  "bioId": "22103107032",
-  "branchCode": "103",
-  "collegeCode": "107E",
-  "currentSemester": "3",
-  "emailId": "zreeta000@gmail.com",
-  "gender": "F",
-  "hosteller": true,
-  "imageUrl": "",
-  "lastUpdateTime": "2024-01-12T01:39:27.852Z",
-  "name": "Manya Singh",
-  "parentName": "Arvind Kumar Singh",
-  "parentNumber": "8789493664",
-  "phoneNo": "9508300185",
-  "regNo": "22103107032",
-  "userId": 22103107032,
-  "yearBack": "0"
-};
 export const CheckUser = ({ navigation }) => {     //checking user login data in database table if exit or not 
   db.transaction(function (txn) {
     txn.executeSql(
@@ -36,7 +15,6 @@ export const CheckUser = ({ navigation }) => {     //checking user login data in
         if (res.rows.length == 0) {
           // txn.executeSql('DROP TABLE IF EXISTS table_user', []);
           txn.executeSql(
-            // 'CREATE TABLE IF NOT EXISTS table_user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, user_name VARCHAR(20), user_Id VARCHAR(15), user_password VARCHAR(20))',
             'CREATE TABLE IF NOT EXISTS table_user(' +
               'user_id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
               'admissionType TEXT, ' +
@@ -61,22 +39,6 @@ export const CheckUser = ({ navigation }) => {     //checking user login data in
               'token TEXT, ' +
               'date TEXT)',
             []
-          );
-        }else {
-          // Table exists, fetch column names
-          txn.executeSql(
-            "PRAGMA table_info('table_user')",
-            [],
-            function(txn, res) {
-              const columnNames = [];
-              for (let i = 0; i < res.rows.length; i++) {
-                columnNames.push(res.rows.item(i).name);
-              }
-              console.log('Column names:', columnNames);
-            },
-            function(txn, error) {
-              console.error('Error fetching column names:', error);
-            }
           );
         }
       }
@@ -119,19 +81,6 @@ export const RegisterUser = async ({ navigation, username, userId, password }) =
     return;
   }
 
-  // db.transaction(function (tx) {
-  //   tx.executeSql(
-  //     'INSERT INTO table_user (user_name, user_Id, user_password) VALUES (?,?,?)',
-  //     [username, userId, password],
-  //     (tx, results) => {
-  //       console.log('Results', results.rowsAffected);
-  //       if (results.rowsAffected > 0) {
-  //         navigation.navigate('LoadingIndicator');
-  //       } else alert('Registration Failed');
-  //     }
-  //   );
-  // });
-
  let Login_Api = await Login_api(userId, password);
 
  if(Login_Api.response.message ==  "Logged in successfully"){
@@ -150,13 +99,11 @@ if(userData.hosteller == true){
 
   // Extracting values from userData object and adding token and date values
   const values = [...Object.values(userData), token, new Date().toISOString()];
- console.log(columns);
- console.log(values);
- console.log(placeholders);
+ 
   db.transaction(function (tx) {
     tx.executeSql(
-      'INSERT INTO table_user (${columns}) VALUES (${placeholders})',
-      values,
+      'INSERT INTO table_user (' + columns + ') VALUES (' + placeholders + ')',
+    values,
       (tx, results) => {
         console.log('Results', results.rowsAffected);
         if (results.rowsAffected > 0) {
@@ -192,15 +139,15 @@ export const deleteUser = ({ navigation }) => {
 };
 
 
-const getTokenAndDateFromDatabase = async () => {
+export const getTokenAndDateFromDatabase = async () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        'SELECT token, date FROM table_user ORDER BY date DESC LIMIT 1',
+        'SELECT userId, token, date FROM table_user ORDER BY date DESC LIMIT 1',
         [],
         (_, { rows }) => {
-          const { token, date } = rows.item(0);
-          resolve({ token, date });
+          const { userId, token, date } = rows.item(0);
+          resolve({ userId, token, date });
         },
         (_, error) => {
           reject(error);
@@ -210,18 +157,9 @@ const getTokenAndDateFromDatabase = async () => {
     });
   });
 };
-// const fetchData = async () => {
-//   try {
-//     const { token, date } = await getTokenAndDateFromDatabase();
-//     console.log('Token:', token);
-//     console.log('Date:', date);
-//   } catch (error) {
-//     console.error('Error retrieving token and date:', error);
-//   }
-// };
 
 // Function to retrieve user data from the database
-const getUserDataFromDatabase = () => {
+export  const getUserDataFromDatabase = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
@@ -246,11 +184,3 @@ const getUserDataFromDatabase = () => {
     });
   });
 };
-
-// getUserDataFromDatabase()
-//   .then(userData => {
-//     console.log('User Data:', userData);
-//   })
-//   .catch(error => {
-//     console.error('Error retrieving user data:', error);
-//   });

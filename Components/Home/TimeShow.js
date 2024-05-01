@@ -1,9 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Modal, Pressable, StyleSheet } from 'react-native';
+import { getTokenAndDateFromDatabase } from '../Database';
+import { Attendance_api } from '../api';
+import { format } from 'date-fns';
 
 const TimeShow = ({ isVisible, selected_day }) => {         //  UI of selected day sign in and sign out time Box
-  const [signin, setSignin] = useState('10:30 am');
-  const [signout, setSignout] = useState('3:30 pm');
+  const [signin, setSignin] = useState();
+  const [signout, setSignout] = useState();
+
+  let signIn = [];
+  let signOut = [];
+  let start = selected_day;
+  let end = selected_day;
+
+  useEffect(()=>{
+  getTokenAndDateFromDatabase().then(res => {
+    Attendance_api(res.token, res.userId, start, end).then(result => {
+      signIn = result.map(entry => entry.inTime);
+      signOut = result.map(entry => entry.outTime);
+      setSignin(signIn);
+      setSignout(signOut);
+      console.log(signIn,signOut);
+    }).catch(error => {
+      console.log("error in Sign in time ", error);
+    });
+  }).catch(error => {
+    console.log('Error in getting token from database for sign in time:', error);
+  });
+},[selected_day]);
+
 
   return (
     <Modal visible={isVisible} animationType="fade" transparent={true}>
