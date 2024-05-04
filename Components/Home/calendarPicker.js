@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Modal, Pressable } from "react-native";
+import { StyleSheet, Text, View, Modal, Pressable, ActivityIndicator } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import { startOfMonth, endOfMonth, format, startOfDay, addDays, isSunday, addMonths } from 'date-fns';
 import dateRange from './colorfulldays';
@@ -15,12 +15,13 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
     const [buttonColor4, setButtonColor4] = useState(['white', 'black']);
     const [buttonColor5, setButtonColor5] = useState(['white', 'black']);
     const [buttonColor6, setButtonColor6] = useState(['white', 'black']);
-
+    const [isLoadingComplete, setIsLoadingComplete] = useState(true);
 
     useEffect(() => {           // set colorfulldays of calendar on opening app  
         currentMonth().then(res => {
             getdata(res).then(r => {
-                })
+                setIsLoadingComplete(false);
+            })
                 .catch(error => {
                     console.error('error in getdata function 1', error);
                 })
@@ -180,204 +181,210 @@ const Calendar_Picker = ({ showDateRange, closeModal, getdata, update_Input_Star
 
 
     return (
+
         <View >
+            {isLoadingComplete ?
+                < View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', top: 210, zIndex: 2, }}>
+                    <ActivityIndicator animating={isLoadingComplete} size={100} color={'black'} /> </View >
+                    : null
+            }
 
-            <Modal visible={showDateRange} animationType="fade" transparent={true}>
-                <View style={stylesthis.Layout} >
-                    <CalendarPicker
-                        startFromMonday={true}
-                        allowRangeSelection={true}
-                        minDate={minDate}
-                        maxDate={maxDate}
-                        width={350}
-                        headerWrapperStyle={{ marginTop: 20, }}
-                        todayBackgroundColor="#e6ffe6"
-                        selectedDayColor="#7300e6"
-                        selectedDayTextColor="#FFFFFF"
-                        onDateChange={onDateChange}
+                    <Modal visible={showDateRange} animationType="fade" transparent={true}>
+                        <View style={stylesthis.Layout} >
+                            <CalendarPicker
+                                startFromMonday={true}
+                                allowRangeSelection={true}
+                                minDate={minDate}
+                                maxDate={maxDate}
+                                width={350}
+                                headerWrapperStyle={{ marginTop: 20, }}
+                                todayBackgroundColor="#e6ffe6"
+                                selectedDayColor="#7300e6"
+                                selectedDayTextColor="#FFFFFF"
+                                onDateChange={onDateChange}
 
-                    />
+                            />
 
-                    <View style={styles.upperbox}>
-                        <Pressable
-                            style={[styles.btn, { backgroundColor: buttonColor1[0] }]}
-                            onPress={() => {
-                                currentMonth().then(res => {
-                                    getdata(res).then(r => {
+                            <View style={styles.upperbox}>
+                                <Pressable
+                                    style={[styles.btn, { backgroundColor: buttonColor1[0] }]}
+                                    onPress={() => {
+                                        currentMonth().then(res => {
+                                            getdata(res).then(r => {
 
-                                    })
-                                        .catch(error => {
-                                            console.error('error in getdata function 3', error);
-                                        })
-                                        .catch(error => {
-                                            console.error('error while calling current month 1', error);
-                                        })
-                                });
-                                closeModal();
-                                setButtonColor1(['#7a38b0', 'white']);
-                                setButtonColor2(['white', 'black']);
-                                setButtonColor3(['white', 'black']);
-                                setButtonColor4(['white', 'black']);
-                                setButtonColor5(['white', 'black']);
-                                setButtonColor6(['white', 'black']);
-                            }}>
-                            <Text style={[styles.btntext, { color: buttonColor1[1] }]}>Current Month</Text>
-                        </Pressable>
-                        <Pressable
-                            style={[styles.btn, { backgroundColor: buttonColor2[0], marginHorizontal: "3%", }]}
-                            onPress={() => {
-                                lastMonth().then(res => {
-                                    getdata(res).then(r => {
+                                            })
+                                                .catch(error => {
+                                                    console.error('error in getdata function 3', error);
+                                                })
+                                                .catch(error => {
+                                                    console.error('error while calling current month 1', error);
+                                                })
+                                        });
+                                        closeModal();
+                                        setButtonColor1(['#7a38b0', 'white']);
+                                        setButtonColor2(['white', 'black']);
+                                        setButtonColor3(['white', 'black']);
+                                        setButtonColor4(['white', 'black']);
+                                        setButtonColor5(['white', 'black']);
+                                        setButtonColor6(['white', 'black']);
+                                    }}>
+                                    <Text style={[styles.btntext, { color: buttonColor1[1] }]}>Current Month</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.btn, { backgroundColor: buttonColor2[0], marginHorizontal: "3%", }]}
+                                    onPress={() => {
+                                        lastMonth().then(res => {
+                                            getdata(res).then(r => {
 
-                                    })
-                                        .catch(error => {
-                                            console.error('error in getdata function 4', error);
-                                        })
-                                        .catch(error => {
-                                            console.error('error while calling last month', error);
-                                        })
-                                });
-                                closeModal();
-                                setButtonColor1(['white', 'black']);
-                                setButtonColor2(['#7a38b0', 'white']);
-                                setButtonColor3(['white', 'black']);
-                                setButtonColor4(['white', 'black']);
-                                setButtonColor5(['white', 'black']);
-                                setButtonColor6(['white', 'black']);
-                            }}>
-                            <Text style={[styles.btntext, { color: buttonColor2[1] }]}>Last Month
-                            </Text>
-                        </Pressable>
-                        <Pressable
-                            style={[styles.btn, { backgroundColor: buttonColor3[0] }]}
-                            onPress={() => {
-                                lastWeek().then(res => {
-                                    getdata(res).then(r => {
+                                            })
+                                                .catch(error => {
+                                                    console.error('error in getdata function 4', error);
+                                                })
+                                                .catch(error => {
+                                                    console.error('error while calling last month', error);
+                                                })
+                                        });
+                                        closeModal();
+                                        setButtonColor1(['white', 'black']);
+                                        setButtonColor2(['#7a38b0', 'white']);
+                                        setButtonColor3(['white', 'black']);
+                                        setButtonColor4(['white', 'black']);
+                                        setButtonColor5(['white', 'black']);
+                                        setButtonColor6(['white', 'black']);
+                                    }}>
+                                    <Text style={[styles.btntext, { color: buttonColor2[1] }]}>Last Month
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.btn, { backgroundColor: buttonColor3[0] }]}
+                                    onPress={() => {
+                                        lastWeek().then(res => {
+                                            getdata(res).then(r => {
 
-                                    })
-                                        .catch(error => {
-                                            console.error('error in getdata function 5', error);
-                                        })
-                                        .catch(error => {
-                                            console.error('error while calling lastweek', error);
-                                        })
-                                });
-                                closeModal();
-                                setButtonColor1(['white', 'black']);
-                                setButtonColor2(['white', 'black']);
-                                setButtonColor3(['#7a38b0', 'white']);
-                                setButtonColor4(['white', 'black']);
-                                setButtonColor5(['white', 'black']);
-                                setButtonColor6(['white', 'black']);
-                            }}>
-                            <Text style={[styles.btntext, { color: buttonColor3[1] }]}>Last 7 days</Text>
-                        </Pressable>
-                    </View>
-                    <View style={styles.upperbox}>
-                        <Pressable
-                            style={[styles.btn, { backgroundColor: buttonColor4[0] }]}
-                            onPress={() => {
-                                from_30_Day_ago().then(res => {
-                                    getdata(res).then(r => {
+                                            })
+                                                .catch(error => {
+                                                    console.error('error in getdata function 5', error);
+                                                })
+                                                .catch(error => {
+                                                    console.error('error while calling lastweek', error);
+                                                })
+                                        });
+                                        closeModal();
+                                        setButtonColor1(['white', 'black']);
+                                        setButtonColor2(['white', 'black']);
+                                        setButtonColor3(['#7a38b0', 'white']);
+                                        setButtonColor4(['white', 'black']);
+                                        setButtonColor5(['white', 'black']);
+                                        setButtonColor6(['white', 'black']);
+                                    }}>
+                                    <Text style={[styles.btntext, { color: buttonColor3[1] }]}>Last 7 days</Text>
+                                </Pressable>
+                            </View>
+                            <View style={styles.upperbox}>
+                                <Pressable
+                                    style={[styles.btn, { backgroundColor: buttonColor4[0] }]}
+                                    onPress={() => {
+                                        from_30_Day_ago().then(res => {
+                                            getdata(res).then(r => {
 
-                                    })
-                                        .catch(error => {
-                                            console.error('error in getdata function 6', error);
-                                        })
-                                        .catch(error => {
-                                            console.error('error while calling 30 days ago', error);
-                                        })
-                                });
-                                closeModal();
-                                setButtonColor1(['white', 'black']);
-                                setButtonColor2(['white', 'black']);
-                                setButtonColor3(['white', 'black']);
-                                setButtonColor4(['#7a38b0', 'white']);
-                                setButtonColor5(['white', 'black']);
-                                setButtonColor6(['white', 'black']);
-                            }}>
-                            <Text style={[styles.btntext, { color: buttonColor4[1] }]}>Last 30 days</Text>
-                        </Pressable>
-                        <Pressable
-                            style={[styles.btn, { backgroundColor: buttonColor5[0], marginHorizontal: "3%", }]}
-                            onPress={() => {
-                                thisYear().then(res => {
-                                    getdata(res).then(r => {
+                                            })
+                                                .catch(error => {
+                                                    console.error('error in getdata function 6', error);
+                                                })
+                                                .catch(error => {
+                                                    console.error('error while calling 30 days ago', error);
+                                                })
+                                        });
+                                        closeModal();
+                                        setButtonColor1(['white', 'black']);
+                                        setButtonColor2(['white', 'black']);
+                                        setButtonColor3(['white', 'black']);
+                                        setButtonColor4(['#7a38b0', 'white']);
+                                        setButtonColor5(['white', 'black']);
+                                        setButtonColor6(['white', 'black']);
+                                    }}>
+                                    <Text style={[styles.btntext, { color: buttonColor4[1] }]}>Last 30 days</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.btn, { backgroundColor: buttonColor5[0], marginHorizontal: "3%", }]}
+                                    onPress={() => {
+                                        thisYear().then(res => {
+                                            getdata(res).then(r => {
 
-                                    })
-                                        .catch(error => {
-                                            console.error('error in getdata function 7', error);
-                                        })
-                                        .catch(error => {
-                                            console.error('error while calling thisYear', error);
-                                        })
-                                });
-                                closeModal();
-                                setButtonColor1(['white', 'black']);
-                                setButtonColor2(['white', 'black']);
-                                setButtonColor3(['white', 'black']);
-                                setButtonColor4(['white', 'black']);
-                                setButtonColor5(['#7a38b0', 'white']);
-                                setButtonColor6(['white', 'black']);
-                            }}>
-                            <Text style={[styles.btntext, { color: buttonColor5[1] }]}> One Year
-                            </Text>
-                        </Pressable>
-                        <Pressable
-                            style={[styles.btn, { backgroundColor: buttonColor6[0] }]}
-                            onPress={() => {
-                                last_6_Months().then(res => {
-                                    getdata(res).then(rr => {
+                                            })
+                                                .catch(error => {
+                                                    console.error('error in getdata function 7', error);
+                                                })
+                                                .catch(error => {
+                                                    console.error('error while calling thisYear', error);
+                                                })
+                                        });
+                                        closeModal();
+                                        setButtonColor1(['white', 'black']);
+                                        setButtonColor2(['white', 'black']);
+                                        setButtonColor3(['white', 'black']);
+                                        setButtonColor4(['white', 'black']);
+                                        setButtonColor5(['#7a38b0', 'white']);
+                                        setButtonColor6(['white', 'black']);
+                                    }}>
+                                    <Text style={[styles.btntext, { color: buttonColor5[1] }]}> One Year
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.btn, { backgroundColor: buttonColor6[0] }]}
+                                    onPress={() => {
+                                        last_6_Months().then(res => {
+                                            getdata(res).then(rr => {
 
-                                    })
-                                        .catch(error => {
-                                            console.error('error in getdata function 8', error);
-                                        })
-                                        .catch(error => {
-                                            console.error('error while calling last six month', error);
-                                        })
-                                });
-                                closeModal();
-                                setButtonColor1(['white', 'black']);
-                                setButtonColor2(['white', 'black']);
-                                setButtonColor3(['white', 'black']);
-                                setButtonColor4(['white', 'black']);
-                                setButtonColor5(['white', 'black']);
-                                setButtonColor6(['#7a38b0', 'white']);
-                            }}>
-                            <Text style={[styles.btntext, { color: buttonColor6[1] }]}>Six Months</Text>
-                        </Pressable>
-                    </View>
+                                            })
+                                                .catch(error => {
+                                                    console.error('error in getdata function 8', error);
+                                                })
+                                                .catch(error => {
+                                                    console.error('error while calling last six month', error);
+                                                })
+                                        });
+                                        closeModal();
+                                        setButtonColor1(['white', 'black']);
+                                        setButtonColor2(['white', 'black']);
+                                        setButtonColor3(['white', 'black']);
+                                        setButtonColor4(['white', 'black']);
+                                        setButtonColor5(['white', 'black']);
+                                        setButtonColor6(['#7a38b0', 'white']);
+                                    }}>
+                                    <Text style={[styles.btntext, { color: buttonColor6[1] }]}>Six Months</Text>
+                                </Pressable>
+                            </View>
 
-                    {/* <Pressable onPress={onSubmit}>
+                            {/* <Pressable onPress={onSubmit}>
                         <Text style={stylesthis.cross}>
                             <Entypo name="cross" color={'black'} size={30} />
                         </Text>
                     </Pressable> */}
 
-                </View>
-            </Modal>
-        </View>
+                        </View>
+                    </Modal>
+                </View >
     )
 };
 
 
 
-const stylesthis = StyleSheet.create({
-    Layout: {
-        width: "92%",
-        height: 410,
-        backgroundColor: '#e3ddcc',
-        marginTop: 280,
-        marginHorizontal: "4%",
-        borderRadius: 10,
-        elevation: 3,
-        shadowColor: 'blue',
+            const stylesthis = StyleSheet.create({
+                Layout: {
+                width: "92%",
+            height: 410,
+            backgroundColor: '#e3ddcc',
+            marginTop: 280,
+            marginHorizontal: "4%",
+            borderRadius: 10,
+            elevation: 3,
+            shadowColor: 'blue',
     },
-    cross: {
-        marginLeft: "90%",
-        marginTop: 10,
+            cross: {
+                marginLeft: "90%",
+            marginTop: 10,
     },
 });
 
-export default Calendar_Picker;
+            export default Calendar_Picker;

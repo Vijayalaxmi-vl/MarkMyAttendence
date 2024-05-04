@@ -77,7 +77,9 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      <ScrollView>
+     <ScrollView 
+     showsVerticalScrollIndicator={false} 
+     >
         <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
         <View style={{ width: "100%", height: 9, backgroundColor: '#e3e2e1' }}></View>
 
@@ -116,6 +118,7 @@ const Home = ({ navigation }) => {
         <View style={styles.statusbox}>
           <View style={styles.status}>
             <ScrollView horizontal={true}
+            showsHorizontalScrollIndicator={false}
               contentOffset={{ x: 400, y: 0 }} // Set contentOffset to start from the left side
             >
               <View style={{
@@ -204,7 +207,7 @@ const Home = ({ navigation }) => {
 
 
 
-      </ScrollView>
+        </ScrollView>
     </SafeAreaView>
   );
 };

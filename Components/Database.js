@@ -66,12 +66,8 @@ export const Check_User = ({ navigation }) => {
 
 
 //Saving  user login data in database table 
-export const RegisterUser = async ({ navigation, username, userId, password }) => {
+export const RegisterUser = async ({ navigation, userId, password }) => {
 
-  if (!username) {
-    alert('Please fill Username');
-    return;
-  }
   if (!userId) {
     alert('Please fill UserId Number');
     return;

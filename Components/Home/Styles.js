@@ -17,10 +17,10 @@ const styles = StyleSheet.create({
     },
     input: {
       width: 250,
-      height: 35,
+     // height: 35,
       color:'black',
       fontSize: 14,
-      marginTop: 5,
+      marginTop: 0,
       backgroundColor: 'white',
       //textAlign: 'center',
     },
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 5,
-      elevation: 1,
-    //  shadowColor: 'black',
+      elevation: 3,
+      shadowColor: 'black',
       backgroundColor: '#e3e2e1',
     },
     statusbtn:{
@@ -66,8 +66,6 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       marginTop:35,
       marginBottom: 20,
-      borderWidth:2,
-      borderColor:'#e3e2e1',
     },
   
     modalbox:{

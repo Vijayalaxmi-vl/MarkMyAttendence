@@ -19,7 +19,6 @@ import { CheckUser, RegisterUser } from './Database';
 import { useIsFocused } from '@react-navigation/native';
 
 const Login = ({ navigation }) => {                   //Login Page UI
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('123456');
   const [userId, setUserId] = useState('22103107032');
 
@@ -31,7 +30,6 @@ const Login = ({ navigation }) => {                   //Login Page UI
 
   const clearFields = () => {   // clear all input feild value after 2 seconds press 'sign in'  button
     setTimeout(() => {
-      setUsername('');
       setUserId('');
       setPassword('');
     }, 2000);
@@ -57,11 +55,11 @@ const Login = ({ navigation }) => {                   //Login Page UI
             </View>
             <Text style={{ fontSize: 14, marginTop: 15, color: 'grey', marginBottom: 15, }}>Please Sign in to continue</Text>
 
-            <TextInput
+            {/* <TextInput
               style={styles.input}
               value={username}
               onChangeText={text => setUsername(text)}
-              placeholder="Username"></TextInput>
+              placeholder="Username"></TextInput> */}
             <TextInput
               style={styles.input}
               value={userId}
@@ -80,7 +78,7 @@ const Login = ({ navigation }) => {                   //Login Page UI
             <TouchableOpacity
               style={styles.btn}
               onPress={() => {
-                RegisterUser({ navigation, username, userId, password });   // saving user login data in database
+                RegisterUser({ navigation,  userId, password });   // saving user login data in database
                // clearFields();
               }}>
               <Text style={{ fontSize: 25, color: '#f2f1f0', textAlign: 'center', padding: 5, fontWeight: '500' }}>Sign in</Text>
